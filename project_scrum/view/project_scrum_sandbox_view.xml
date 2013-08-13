@@ -2,15 +2,31 @@
 <openerp>
     <data>
         <!-- Sandbox -->
+        <record id="view_product_sandbox_filter" model="ir.ui.view">
+            <field name="name">view.project.scrum.sandbox.search</field>
+            <field name="model">project.scrum.sandbox</field>
+            <field name="arch" type="xml">
+                <search string="Sandbox">
+                    <field name="name" string="Name" filter_domain="['|', ('name','ilike',self), ('for_then', 'ilike', self)]" context="{'default_name': self}" />
+                    <field name="role_id" string="Role" context="{'default_role_id_name': self}" />
+                    <field name="project_id" string="Project" context="{'default_project_id_name': self}" />
+                    <group expand="0" string="Group By...">
+                        <filter string="Role" domain="[]" context="{'group_by':'role_id'}"/>
+                        <filter string="Project" domain="[]" context="{'group_by':'project_id'}"/>
+                        <filter string="Developer" domain="[]" context="{'group_by':'developer_id'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
         <record model="ir.ui.view" id="view_project_scrum_sandbox_tree">
             <field name="model">project.scrum.sandbox</field>
             <field name="name">view.project.scrum.sandbox.tree</field>
             <field name="arch" type="xml">
                 <tree string="Sandbox" editable="top">
-                    <field name="role_id"/>
+                    <field name="role_id" domain="project_id and [('project_id', 'in', [project_id])] or []" context="{'search_default_project_id': project_id, 'default_project_id': project_id}" />
                     <field name="name"/>
                     <field name="for_then"/>
-                    <field name="project_id"/>
+                    <field name="project_id" />
                     <button type="action"
                             name="%(action_scrum_sandbox_to_backlog)d"
                             string="Transfer to product backlog"
