@@ -176,7 +176,7 @@ class projectScrumMeeting(osv.osv):
     _columns = {
         'name' : fields.char('Meeting Name', size=64),
         'date': fields.date('Meeting Date', required=True),
-        'user_id': fields.many2one('res.users', "Developer", readonly=True),
+        'user_id': fields.many2one('res.users', "Developer"),
         'sprint_id': fields.many2one('project.scrum.sprint', 'Sprint'),
         'project_id': fields.related('sprint_id', 'release_id', 'project_id', type='many2one', relation='project.project', string='Project', readonly=True),
         'scrum_master_id': fields.related('sprint_id', 'scrum_master_id', type='many2one', relation='res.users', string='Scrum Master', readonly=True),
