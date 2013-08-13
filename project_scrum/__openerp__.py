@@ -65,6 +65,7 @@ Thanks to report questions to david.drapeau@el2de.com
         "view/project_scrum_role_view.xml",
         "view/project_scrum_sandbox_view.xml",
         "view/project_scrum_view.xml",
+        "data/moscow_data.xml",
     ],
     'css': [
         'static/src/css/project_scrum.css',

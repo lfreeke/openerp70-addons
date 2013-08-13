@@ -6,6 +6,8 @@ import time
 import tools
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import logging
+_logger = logging.getLogger(__name__)
 
 SPRINT_STATES = [('draft','Draft'),
     ('open','Open'),
@@ -18,6 +20,19 @@ BACKLOG_STATES = [('draft','Draft'),
     ('pending','Pending'),
     ('done','Done'),
     ('cancel','Cancelled')]
+
+class projectScrumBacklogMoSCoW(osv.osv):
+    _name = 'project.scrum.backlog.moscow'
+    _description = 'Prioritization of product backlog using MoSCoW Technique'
+
+    _columns = {
+        'name': fields.char('Name', required=True, size=64),
+        'sequence': fields.integer('Sequence', help="Used to order the Priorities"),
+    }
+    _sql_constraints = [
+        ('name_uniq', 'unique(name)', 'MoSCoW Name must be unique!'),
+    ]
+    _order = 'sequence ASC'
 
 class projectScrumSprint(osv.osv):
     _name = 'project.scrum.sprint'
@@ -324,6 +339,25 @@ class projectScrumProductBacklog(osv.osv):
     def button_pending(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state':'pending'}, context=context)
         return True
+
+    def _read_group_moscow(self, cr, uid, ids, domain, read_group_order=None, access_rights_uid=None, context=None):
+        moscow_obj = self.pool.get('project.scrum.backlog.moscow')
+        access_rights_uid = access_rights_uid or uid
+        ids = moscow_obj.search(cr, uid, [], order='sequence', context=context)
+        result = moscow_obj.name_get(cr, access_rights_uid, ids, context=context)
+        return result, {}
+
+    def _read_group_sprint(self, cr, uid, ids, domain, read_group_order=None, access_rights_uid=None, context=None):
+        sprint_obj = self.pool.get('project.scrum.sprint')
+        access_rights_uid = access_rights_uid or uid
+        domain = []
+        project_name = context.get('search_default_project_id', False)
+        if project_name:
+            project_id = self.pool.get("project.project").search(cr, uid, [('name', '=', project_name)])
+            domain = project_id and [('project_id', 'in', project_id)] or domain
+        ids = sprint_obj.search(cr, uid, domain)
+        result = sprint_obj.name_get(cr, access_rights_uid, ids, context=context)
+        return result, {}
     
     _columns = {
         'role_id': fields.many2one('project.scrum.role', "As", required=True, readonly=True, states={'draft':[('readonly',False)]}),
@@ -359,6 +393,7 @@ class projectScrumProductBacklog(osv.osv):
         'task_hours': fields.function(_compute, multi="task_hours", method=True, string='Task Hours', help='Estimated time of the total hours of the tasks'),
         
         'color': fields.integer('Color Index'),
+        'moscow_id': fields.many2one('project.scrum.backlog.moscow', "MoSCoW", track_visibility='onchange'),
     }
     
     _defaults = {
@@ -368,6 +403,11 @@ class projectScrumProductBacklog(osv.osv):
         'active':  1,
         'sequence': 1000, #TODO create function to compute sequence by uniq value for all product backlog
         'value_to_user': 50,
+    }
+
+    _group_by_full = {
+        'moscow_id': _read_group_moscow,
+        'sprint_id': _read_group_sprint,
     }
     
     _order = "sequence"
