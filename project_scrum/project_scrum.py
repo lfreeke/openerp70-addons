@@ -199,6 +199,7 @@ class projectScrumMeeting(osv.osv):
         'question_yesterday': fields.text('Tasks since yesterday'),
         'question_today': fields.text('Tasks for today'),
         'question_blocks': fields.text('Blocks encountered'),
+        'note': fields.text('Notes'),
         'task_ids': fields.many2many('project.task', 'project_scrum_meeting_task_rel', 'meeting_id', 'task_id', 'Tasks'),
         'user_story_ids': fields.many2many('project.scrum.product.backlog', 'project_scrum_meeting_story_rel', 'meeting_id', 'story_id', 'Stories'),
     }
