@@ -37,6 +37,7 @@ class projectScrumBacklogMoSCoW(osv.osv):
 class projectScrumSprint(osv.osv):
     _name = 'project.scrum.sprint'
     _description = 'Project Scrum Sprint'
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
     
     def _compute(self, cr, uid, ids, fields, arg, context=None):
         res = {}.fromkeys(ids, 0.0)
