@@ -12,3 +12,4 @@ class projectScrumRole(osv.osv):
         'persona_name' : fields.char('Persona Name', size=128),
         'persona_description' : fields.text('Persona Description'),
     }
+

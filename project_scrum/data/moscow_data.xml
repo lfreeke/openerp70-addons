@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+    <!-- MoSCoW Items -->
+        <record id="moscow_must" model="project.scrum.backlog.moscow">
+            <field name="sequence">1</field>
+            <field name="name">Must</field>
+        </record>
+        <record id="moscow_should" model="project.scrum.backlog.moscow">
+            <field name="sequence">2</field>
+            <field name="name">Should</field>
+        </record>
+        <record id="moscow_could" model="project.scrum.backlog.moscow">
+            <field name="sequence">3</field>
+            <field name="name">Could</field>
+        </record>
+        <record id="moscow_wont" model="project.scrum.backlog.moscow">
+            <field name="sequence">4</field>
+            <field name="name">Won't</field>
+        </record>
+
+    </data>
+</openerp>

@@ -13,6 +13,24 @@ class projectScrumSandbox(osv.osv):
         'developer_id': fields.many2one('res.users', 'Developer'),
     }
     
+    def _get_default_role_id(self, cr, uid, ctx={}):
+        role = ctx.get('default_role_id_name', False)
+        if type(role) is int:
+            return [role]
+        elif isinstance(role, basestring):
+            return self.pool.get('project.scrum.role').search(cr, uid, [('name', '=', role)])
+        return role
+
+    def _get_default_project_id(self, cr, uid, ctx={}):
+        proj = ctx.get('default_project_id_name', False)
+        if type(proj) is int:
+            return [proj]
+        elif isinstance(proj, basestring):
+            return self.pool.get("project.project").search(cr, uid, [('name', '=', proj)])
+        return proj
+
     _defaults = {
         'developer_id': lambda self, cr, uid, context: uid,
+        'project_id': _get_default_project_id,
+        'role_id': _get_default_role_id,
     }
