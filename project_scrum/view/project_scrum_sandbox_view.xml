@@ -41,7 +41,7 @@
                 <form string="Sandbox" version="7.0">
                     <header groups="base.group_user">
                         <button type="action" name="%(action_scrum_sandbox_to_backlog)d" string="Transfer to product backlog"
-                            class="oe_highlight" context="{'default_priority_id':priority_id, 'default_project_id':project_id, 'default_for_then':for, 'default_name':name, 'default_developer_id': developer_id, 'default_role_id': role_id}"/>
+                            class="oe_highlight" context="{'default_priority_id':priority_id, 'default_project_id':project_id, 'default_for_then':for_then, 'default_name':name, 'default_developer_id': developer_id, 'default_role_id': role_id}"/>
                     </header>
                     <sheet>
                     <h1>
